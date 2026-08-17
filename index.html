@@ -74,6 +74,44 @@ footer{background:#040a12;color:#8ea2b7;padding:55px 0 25px}.footer-grid{display
   }
 }
 
+
+/* FINAL MOBILE VIEW: ONLY HERO + SOCIAL + MISSION */
+@media screen and (max-width: 620px) {
+  /* Hide every major section by default on phones */
+  main > section:not(.hero):not(#social):not(#mission) {
+    display: none !important;
+  }
+
+  /* The only three visible mobile sections */
+  main > section.hero,
+  main > section#social,
+  main > section#mission {
+    display: flex !important;
+  }
+
+  /* Hide navigation links to sections that do not exist in mobile view */
+  #navbar .nav-links a[href="#campus"],
+  #navbar .nav-links a[href="#platform-game"],
+  #navbar .nav-links a[href="#platforms"],
+  #navbar .nav-links a[href="#find-department"],
+  #navbar .nav-links a[href="#starter-challenge"],
+  #navbar .nav-links a[href="#scenarios"],
+  #navbar .nav-links a[href="#passport"],
+  #navbar .nav-links a[href="#journey"] {
+    display: none !important;
+  }
+
+  /* Keep the three mobile sections comfortable on phones */
+  main > section#social,
+  main > section#mission {
+    min-height: 100svh;
+    align-items: center;
+  }
+
+  body:not(.presentation) .presentation-down {
+    display: none !important;
+  }
+}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important;scroll-behavior:auto!important}#fly-canvas,#hero-canvas{display:none}}
 
 /* ---------- PRESENTATION ICON ---------- */
@@ -301,4 +339,26 @@ function canvasAnim(id,hero=false){
 }
 canvasAnim("fly-canvas");canvasAnim("hero-canvas",true);
 })();
-</script></body></html>
+</script>
+<script>
+(function enforceMobileView(){
+  const applyMobileView = () => {
+    if (window.innerWidth <= 620) {
+      document.querySelectorAll('main > section').forEach(section => {
+        const keep = section.classList.contains('hero') ||
+                     section.id === 'social' ||
+                     section.id === 'mission';
+        section.style.setProperty('display', keep ? 'flex' : 'none', 'important');
+      });
+    } else {
+      document.querySelectorAll('main > section').forEach(section => {
+        section.style.removeProperty('display');
+      });
+    }
+  };
+  applyMobileView();
+  window.addEventListener('resize', applyMobileView);
+})();
+</script>
+
+</body></html>
