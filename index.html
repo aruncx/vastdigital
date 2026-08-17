@@ -389,4 +389,55 @@ canvasAnim("fly-canvas");canvasAnim("hero-canvas",true);
 })();
 </script>
 
+
+<script>
+/* Mobile safety layer: the four requested sections are always rendered,
+   and their reveal animations are immediately activated. */
+(function () {
+  function syncMobileStudentView() {
+    const mobile = window.matchMedia("(max-width: 620px)").matches;
+    const sections = Array.from(document.querySelectorAll("main > section"));
+    const allowed = new Set(["home", "platforms", "social", "mission"]);
+
+    sections.forEach(function (section) {
+      if (mobile) {
+        const keep = allowed.has(section.id);
+        section.style.setProperty("display", keep ? "block" : "none", "important");
+
+        if (keep) {
+          section.style.setProperty("visibility", "visible", "important");
+          section.style.setProperty("opacity", "1", "important");
+          section.querySelectorAll(".reveal").forEach(function (el) {
+            el.classList.add("in");
+            el.style.setProperty("opacity", "1", "important");
+            el.style.setProperty("transform", "none", "important");
+            el.style.setProperty("visibility", "visible", "important");
+          });
+        }
+      } else {
+        section.style.removeProperty("display");
+        section.style.removeProperty("visibility");
+        section.style.removeProperty("opacity");
+        section.querySelectorAll(".reveal").forEach(function (el) {
+          el.style.removeProperty("opacity");
+          el.style.removeProperty("transform");
+          el.style.removeProperty("visibility");
+        });
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", syncMobileStudentView);
+  } else {
+    syncMobileStudentView();
+  }
+
+  window.addEventListener("resize", syncMobileStudentView);
+  window.addEventListener("orientationchange", function () {
+    setTimeout(syncMobileStudentView, 100);
+  });
+})();
+</script>
+
 </body></html>
